@@ -7,7 +7,7 @@ const words = {
     short: ['hp', 'web', 'xp', 'npc', 'gg', 'fps', 'afk', 'rpg', 'lol', 'dom', 'js', 'css', 'yo', 'tu', 'el', 'ok', 'ta', 'si', 'no', 'utu', 'sol', 'rol', 'bot', 'lan', 'map', 'inv', 'pc', 'ps', 'gol', 'top'],
     medium: ['emma', 'gaby', 'lucky', 'rempi', 'juan', 'combo', 'loot', 'nivel', 'skill', 'spawn', 'magia', 'html', 'game', 'play', 'items', 'boss', 'skins', 'pixel', 'juego', 'clan', 'pvp', 'mmo', 'team', 'arma', 'foro', 'gana', 'modo', 'click', 'taco', 'rato', 'redes', 'joker'],
     long: ['gonzalo', 'borba', 'damian', 'player', 'jugador', 'enemigo', 'consola', 'cartas', 'partida', 'ranking', 'diseño', 'mando', 'acciones', 'habilidad', 'batalla', 'jugar', 'esquivar', 'estrategia', 'victoria', 'secreto', 'monedas', 'girar', 'comando', 'campeon', 'puntos', 'zona', 'tiempo'],
-    extraLong: ['gabriela', 'pajares', 'martinez', 'personaje', 'inventario', 'habilidad', 'videojuego', 'dificultad', 'oneshot', 'estrategia', 'poderes', 'jugabilidad', 'conquistar', 'multijugador', 'conquista', 'exploracion', 'desafio', 'entrenamiento', 'competir', 'realidad', 'superpoderes', 'niveles', 'compañero', 'habilidoso', 'interactivo', 'clases', 'jefes', 'recompensa', 'maraton', 'sorpresa', 'desbloquear'],
+    extraLong: ['gabriela', 'pajares', 'martinez'],
     gg: ["doom","cod","docker","servidor","ansible","php","casino","programacion","sistemas"],
     pajares: ["gantt","backlog","vision","cocinar","repo","pert","cpm","proyecto","ppt"],
 };
@@ -101,12 +101,14 @@ function getWordsByDifficulty(selectedCharacter) {
 
 
 function adjustDifficulty() {
-    wordSpawnRate = Math.max(1000, 3500 - Math.floor(score / 10) * 50);
+    moveSpeed = 1 + (score / 8000);
+
+    wordSpawnRate = Math.max(1000, 3500 - Math.floor(score / 10) * 100);
+
     clearInterval(spawnInterval);
     spawnInterval = setInterval(spawnWord, wordSpawnRate);
-
-    moveSpeed = 1 + (score / 4000);
 }
+
 
 function spawnWord() {
     const currentWords = getWordsByDifficulty(selectedCharacter);
