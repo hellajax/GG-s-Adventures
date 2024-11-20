@@ -52,7 +52,7 @@ characterOptions.addEventListener('click', (event) => {
     const selectedOption = event.target.closest('.character-option');
     if (selectedOption) {
         const selectedCharacter = selectedOption.dataset.character;
-        characterImg.src = `../${selectedCharacter}/1000x1000.png`;
+        characterImg.src = `../${selectedCharacter}/mini.png`;
         characterSelectionScreen.style.display = 'none';
         gameContainer.style.display = 'block';
         startGame();
@@ -211,18 +211,16 @@ document.addEventListener('keydown', (event) => {
                 wrapper.appendChild(word);
                 document.body.appendChild(wrapper);
 
-                // Acumula la palabra para eliminarla después de la animación
                 wordsToRemove.push({ word, index, wordPoints });
             }
         }
     });
 
-    // Después de que se haya completado el ciclo, eliminamos las palabras acumuladas
     wordsToRemove.forEach(({ word, index, wordPoints }) => {
         setTimeout(() => {
-            word.classList.remove('explosion-effect'); // Asegúrate de quitar la clase de animación
-            word.remove(); // Elimina la palabra del DOM
-            activeWords.splice(index, 1); // Elimina la palabra del array de palabras activas
+            word.classList.remove('explosion-effect');
+            word.remove();
+            activeWords.splice(index, 1);
             score += wordPoints;
             updateScore();
 
@@ -231,7 +229,7 @@ document.addEventListener('keydown', (event) => {
                 adjustDifficulty();
                 previousScore = score;
             }
-        }, 500); // Espera a que termine la animación (ajusta el tiempo si es necesario)
+        }, 500);
     });
 });
 
