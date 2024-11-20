@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Retro</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div id="welcome-screen">
+        <h1>GG's Adventures</h1>
+        <button id="start-game-btn">Iniciar Juego</button>
+    </div>
+
+    <div id="character-selection-screen" style="display: none;">
+        <h2>Selecciona tu personaje</h2>
+        <div id="character-options">
+            <div class="character-option" data-character="pajares">
+                <img src="../pajares/1000x1000.png" alt="Pajares" height="200px">
+                <p>Pajares</p>
+            </div>
+            <div class="character-option" data-character="gg">
+                <img src="../gg/1000x1000.png" alt="Gg" height="200px">
+                <p>GG</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="character"><img id="character-img" src="../pajares/1000x1000.png" height="100px"></div>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
