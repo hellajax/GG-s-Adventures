@@ -4,10 +4,12 @@ const welcomeScreen = document.getElementById('welcome-screen');
 const startButton = document.getElementById('start-game-btn');
 
 const words = {
-    short: ['hp', 'web', 'xp', 'npc', 'gg', 'fps', 'afk', 'rpg', 'lol', 'dom', 'js', 'css', 'yo', 'tu', 'el', 'ok', 'ta', 'si', 'no', 'utu', 'sol', 'rol', 'bot', 'lan', 'map', 'inv', 'jv', 'pc', 'ps', 'rg', 'gol', 'top'],
+    short: ['hp', 'web', 'xp', 'npc', 'gg', 'fps', 'afk', 'rpg', 'lol', 'dom', 'js', 'css', 'yo', 'tu', 'el', 'ok', 'ta', 'si', 'no', 'utu', 'sol', 'rol', 'bot', 'lan', 'map', 'inv', 'pc', 'ps', 'gol', 'top'],
     medium: ['emma', 'gaby', 'lucky', 'rempi', 'juan', 'combo', 'loot', 'nivel', 'skill', 'spawn', 'magia', 'html', 'game', 'play', 'items', 'boss', 'skins', 'pixel', 'juego', 'clan', 'pvp', 'mmo', 'team', 'arma', 'foro', 'gana', 'modo', 'click', 'taco', 'rato', 'redes', 'joker'],
     long: ['gonzalo', 'borba', 'damian', 'player', 'jugador', 'enemigo', 'consola', 'cartas', 'partida', 'ranking', 'diseño', 'mando', 'acciones', 'habilidad', 'batalla', 'jugar', 'esquivar', 'estrategia', 'victoria', 'secreto', 'monedas', 'girar', 'comando', 'campeon', 'puntos', 'zona', 'tiempo'],
-    extraLong: ['gabriela', 'pajares', 'martinez', 'personaje', 'inventario', 'habilidad', 'videojuego', 'dificultad', 'oneshot', 'estrategia', 'poderes', 'jugabilidad', 'conquistar', 'multijugador', 'conquista', 'exploracion', 'desafio', 'entrenamiento', 'competir', 'realidad', 'superpoderes', 'niveles', 'compañero', 'habilidoso', 'interactivo', 'clases', 'jefes', 'recompensa', 'maraton', 'sorpresa', 'desbloquear']
+    extraLong: ['gabriela', 'pajares', 'martinez', 'personaje', 'inventario', 'habilidad', 'videojuego', 'dificultad', 'oneshot', 'estrategia', 'poderes', 'jugabilidad', 'conquistar', 'multijugador', 'conquista', 'exploracion', 'desafio', 'entrenamiento', 'competir', 'realidad', 'superpoderes', 'niveles', 'compañero', 'habilidoso', 'interactivo', 'clases', 'jefes', 'recompensa', 'maraton', 'sorpresa', 'desbloquear'],
+    gg: ["doom","cod","docker","proxmox","servidor","ansible","php","casino","programacion","sistemas","operativos"],
+    pajares: ["gantt","backlog","vision","cocinar","repo","pert","cpm","proyecto","ppt"],
 };
 
 let activeWords = [];
@@ -16,6 +18,7 @@ let moveInterval;
 let score = 0;
 let wordSpawnRate = 3000;
 let moveSpeed = 0.5;
+let selectedCharacter;
 
 let backgroundMusic = new Audio('../mp3/music.mp3');
 backgroundMusic.loop = true;
@@ -51,7 +54,7 @@ function showCharacterSelectionScreen() {
 characterOptions.addEventListener('click', (event) => {
     const selectedOption = event.target.closest('.character-option');
     if (selectedOption) {
-        const selectedCharacter = selectedOption.dataset.character;
+        selectedCharacter = selectedOption.dataset.character;
         characterImg.src = `../${selectedCharacter}/mini.png`;
         characterSelectionScreen.style.display = 'none';
         gameContainer.style.display = 'block';
@@ -74,17 +77,28 @@ function stopMusic() {
     backgroundMusic.currentTime = 0;
 }
 
-function getWordsByDifficulty() {
+function getWordsByDifficulty(selectedCharacter) {
+    let wordsPool = [];
+
     if (score < 100) {
-        return words.short;
+        wordsPool = [...words.short];
     } else if (score < 200) {
-        return [...words.short, ...words.medium];
+        wordsPool = [...words.short, ...words.medium];
     } else if (score < 300) {
-        return [...words.short, ...words.medium, ...words.long];
+        wordsPool = [...words.short, ...words.medium, ...words.long];
     } else {
-        return [...words.medium, ...words.long, ...words.extraLong];
+        wordsPool = [...words.medium, ...words.long, ...words.extraLong];
     }
+
+    if (selectedCharacter === "gg") {
+        wordsPool = [...wordsPool, ...words.gg];
+    } else if (selectedCharacter === "pajares") {
+        wordsPool = [...wordsPool, ...words.pajares];
+    }
+
+    return wordsPool;
 }
+
 
 function adjustDifficulty() {
     wordSpawnRate = Math.max(1000, 3500 - Math.floor(score / 10) * 50);
@@ -95,7 +109,7 @@ function adjustDifficulty() {
 }
 
 function spawnWord() {
-    const currentWords = getWordsByDifficulty();
+    const currentWords = getWordsByDifficulty(selectedCharacter);
     const wordText = currentWords[Math.floor(Math.random() * currentWords.length)];
     const wordDiv = document.createElement('div');
     wordDiv.textContent = wordText;
@@ -153,7 +167,6 @@ document.addEventListener('keydown', (event) => {
     click.play();
     const letter = event.key.toLowerCase();
 
-    // Array para acumular las palabras a eliminar después del ciclo
     const wordsToRemove = [];
 
     activeWords.forEach((word, index) => {
@@ -217,11 +230,11 @@ document.addEventListener('keydown', (event) => {
     });
 
     wordsToRemove.forEach(({ word, index, wordPoints }) => {
+        score += wordPoints;
         setTimeout(() => {
             word.classList.remove('explosion-effect');
             word.remove();
             activeWords.splice(index, 1);
-            score += wordPoints;
             updateScore();
 
             if (score - previousScore >= 50) {
