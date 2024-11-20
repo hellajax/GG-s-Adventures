@@ -5,6 +5,27 @@
     font-style: normal;
 }
 
+@keyframes explosion {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5); /* Expande la palabra */
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0); /* Desaparece la palabra */
+        opacity: 0;
+    }
+}
+
+.explosion-effect {
+    animation: explosion 0.5s ease-out forwards;
+    position: relative; /* Mantiene la palabra en el mismo lugar */
+    z-index: 20;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -18,8 +39,6 @@ body {
     overflow: hidden;
 }
 
-
-/* Estilos para la pantalla de bienvenida */
 #welcome-screen {
     position: absolute;
     top: 0;
@@ -61,10 +80,9 @@ body {
     font-weight: bold;
 }
 
-/* Contenedor del juego, oculto inicialmente */
 #game-container {
     position: relative;
-    background: #1e1e1e;
+    background: #0a0a0a;
     width: 80vw;
     height: 80vh;
     border: 2px solid #ffffff;
@@ -90,7 +108,7 @@ body {
     color: #696969;
     text-shadow: 0 0 10px #696969;
     white-space: nowrap;
-    transition: transform 0.1s linear; /* Suaviza el movimiento */
+    transition: transform 0.1s linear;
 }
 
 
@@ -134,6 +152,8 @@ body {
     cursor: pointer;
     text-transform: uppercase;
     transition: background 0.3s ease;
+    margin: 10px 0;
+    width: 200px;
 }
 
 #game-over button:hover {
@@ -141,6 +161,7 @@ body {
     color: #111;
     font-weight: bold;
 }
+
 
 .special {
     color: rgb(186, 186, 0);

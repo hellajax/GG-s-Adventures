@@ -5,7 +5,7 @@ const startButton = document.getElementById('start-game-btn');
 
 const words = {
     short: ['hp', 'web', 'xp', 'npc', 'gg', 'fps', 'afk', 'rpg', 'lol', 'dom', 'js', 'css', 'yo', 'tu', 'el', 'ok', 'ta', 'si', 'no', 'utu', 'sol', 'rol', 'bot', 'lan', 'map', 'inv', 'jv', 'pc', 'ps', 'rg', 'gol', 'top'],
-    medium: ['emma', 'gaby', 'lucky', 'rempi', 'combo', 'loot', 'nivel', 'skill', 'spawn', 'magia', 'html', 'game', 'play', 'items', 'boss', 'skins', 'pixel', 'juego', 'clan', 'pvp', 'mmo', 'team', 'arma', 'foro', 'gana', 'modo', 'click', 'taco', 'rato', 'redes', 'joker'],
+    medium: ['emma', 'gaby', 'lucky', 'rempi', 'juan', 'combo', 'loot', 'nivel', 'skill', 'spawn', 'magia', 'html', 'game', 'play', 'items', 'boss', 'skins', 'pixel', 'juego', 'clan', 'pvp', 'mmo', 'team', 'arma', 'foro', 'gana', 'modo', 'click', 'taco', 'rato', 'redes', 'joker'],
     long: ['gonzalo', 'borba', 'damian', 'player', 'jugador', 'enemigo', 'consola', 'cartas', 'partida', 'ranking', 'diseño', 'mando', 'acciones', 'habilidad', 'batalla', 'jugar', 'esquivar', 'estrategia', 'victoria', 'secreto', 'monedas', 'girar', 'comando', 'campeon', 'puntos', 'zona', 'tiempo'],
     extraLong: ['gabriela', 'pajares', 'martinez', 'personaje', 'inventario', 'habilidad', 'videojuego', 'dificultad', 'oneshot', 'estrategia', 'poderes', 'jugabilidad', 'conquistar', 'multijugador', 'conquista', 'exploracion', 'desafio', 'entrenamiento', 'competir', 'realidad', 'superpoderes', 'niveles', 'compañero', 'habilidoso', 'interactivo', 'clases', 'jefes', 'recompensa', 'maraton', 'sorpresa', 'desbloquear']
 };
@@ -50,7 +50,7 @@ characterOptions.addEventListener('click', (event) => {
     if (selectedOption) {
         const selectedCharacter = selectedOption.dataset.character;
         characterImg.src = `../${selectedCharacter}/1000x1000.png`;
-        characterSelectionScreen.style.display = 'none'; 
+        characterSelectionScreen.style.display = 'none';
         gameContainer.style.display = 'block';
         startGame();
     }
@@ -153,21 +153,21 @@ document.addEventListener('keydown', (event) => {
     activeWords.forEach((word, index) => {
         const text = word.dataset.text;
         const progress = parseInt(word.dataset.progress, 10);
-
+    
         if (text[progress] === letter) {
-            const isSpecial = ["damian", "pajares", "gg", "gonzalo", "martinez", "gabriela", "borba", "gaby"].includes(text);
-
+            const isSpecial = ["damian", "juan", "pajares", "gg", "gonzalo", "martinez", "gabriela", "borba", "gaby"].includes(text);
+    
             if (isSpecial) {
                 word.innerHTML = `<span class="illuminated special">${text.substring(0, progress + 1)}</span>${text.substring(progress + 1)}`;
             } else {
                 word.innerHTML = `<span class="illuminated">${text.substring(0, progress + 1)}</span>${text.substring(progress + 1)}`;
             }
-
+    
             word.dataset.progress = progress + 1;
-
+    
             if (progress + 1 === text.length) {
                 let wordPoints = 10 + text.length;
-
+    
                 if (isSpecial) {
                     if (!specialSound.paused) {
                         specialSound.currentTime = 0;
@@ -181,21 +181,42 @@ document.addEventListener('keydown', (event) => {
                     explosion.play();
                 }
 
-                word.remove();
-                activeWords.splice(index, 1);
-                score += wordPoints;
-                updateScore();
+                // Guardamos la posición original de la palabra
+                const wordRect = word.getBoundingClientRect();
+                const originalX = wordRect.left + window.scrollX; // Posición X original
+                const originalY = wordRect.top + window.scrollY; // Posición Y original
 
-                if (score - previousScore >= 50) {
-                    levelUp.play();
-                    adjustDifficulty();
-                    previousScore = score;
-                }
+                // Añadimos la animación de explosión
+                word.classList.add('explosion-effect');
+
+                // Colocamos un "wrapper" para que la animación ocurra en la posición original
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('explosion-wrapper');
+                wrapper.style.position = 'absolute';
+                wrapper.style.left = `${originalX}px`;
+                wrapper.style.top = `${originalY}px`;
+
+                // Añadimos la palabra dentro del wrapper
+                wrapper.appendChild(word);
+                document.body.appendChild(wrapper);
+
+                // Esperamos que termine la animación antes de eliminar la palabra
+                setTimeout(() => {
+                    wrapper.remove(); // Elimina el wrapper y la palabra
+                    activeWords.splice(index, 1);
+                    score += wordPoints;
+                    updateScore();
+    
+                    if (score - previousScore >= 50) {
+                        levelUp.play();
+                        adjustDifficulty();
+                        previousScore = score;
+                    }
+                }, 500); // Esperamos que termine la animación (500ms)
             }
         }
     });
 });
-
 
 function updateScore() {
     let scoreDisplay = document.getElementById('score');
@@ -244,7 +265,7 @@ function endGame() {
     });
 }
 
-function resetGame(toWelcomeScreen = false) { 
+function resetGame(toWelcomeScreen = false) {
     score = 0;
     updateScore();
 
