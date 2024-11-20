@@ -153,6 +153,9 @@ document.addEventListener('keydown', (event) => {
     click.play();
     const letter = event.key.toLowerCase();
 
+    // Array para acumular las palabras a eliminar después del ciclo
+    const wordsToRemove = [];
+
     activeWords.forEach((word, index) => {
         const text = word.dataset.text;
         const progress = parseInt(word.dataset.progress, 10);
@@ -208,20 +211,27 @@ document.addEventListener('keydown', (event) => {
                 wrapper.appendChild(word);
                 document.body.appendChild(wrapper);
 
-                setTimeout(() => {
-                    wrapper.remove();
-                    activeWords.splice(index, 1);
-                    score += wordPoints;
-                    updateScore();
-
-                    if (score - previousScore >= 50) {
-                        levelUp.play();
-                        adjustDifficulty();
-                        previousScore = score;
-                    }
-                }, 500);
+                // Acumula la palabra para eliminarla después de la animación
+                wordsToRemove.push({ word, index, wordPoints });
             }
         }
+    });
+
+    // Después de que se haya completado el ciclo, eliminamos las palabras acumuladas
+    wordsToRemove.forEach(({ word, index, wordPoints }) => {
+        setTimeout(() => {
+            word.classList.remove('explosion-effect'); // Asegúrate de quitar la clase de animación
+            word.remove(); // Elimina la palabra del DOM
+            activeWords.splice(index, 1); // Elimina la palabra del array de palabras activas
+            score += wordPoints;
+            updateScore();
+
+            if (score - previousScore >= 50) {
+                levelUp.play();
+                adjustDifficulty();
+                previousScore = score;
+            }
+        }, 500); // Espera a que termine la animación (ajusta el tiempo si es necesario)
     });
 });
 
