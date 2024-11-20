@@ -27,6 +27,9 @@ explosion.volume = 0.3;
 let specialSound = new Audio('../mp3/specialSound.mp3');
 specialSound.volume = 0.3;
 
+let meow = new Audio('../mp3/meow.mp3');
+meow.volume = 0.3;
+
 let levelUp = new Audio('../mp3/levelUp.mp3');
 levelUp.volume = 0.3;
 
@@ -176,6 +179,12 @@ document.addEventListener('keydown', (event) => {
                         specialSound.currentTime = 0;
                     }
                     specialSound.play();
+                    wordPoints = 10 + text.length;
+                } else if (isKitty) {
+                    if (!meow.paused) {
+                        meow.currentTime = 0;
+                    }
+                    meow.play();
                     wordPoints = 10 + text.length;
                 } else {
                     if (!explosion.paused) {
