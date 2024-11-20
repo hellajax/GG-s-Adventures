@@ -172,6 +172,11 @@ body {
     text-shadow: 0 0 10px #ffff00;
 }
 
+.illuminated.kitty {
+    color: #00eeff;
+    text-shadow: 0 0 10px #00eeff;
+}
+
 #character-selection-screen {
     position: absolute;
     top: 0;

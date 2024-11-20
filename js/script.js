@@ -153,21 +153,24 @@ document.addEventListener('keydown', (event) => {
     activeWords.forEach((word, index) => {
         const text = word.dataset.text;
         const progress = parseInt(word.dataset.progress, 10);
-    
+
         if (text[progress] === letter) {
             const isSpecial = ["damian", "juan", "pajares", "gg", "gonzalo", "martinez", "gabriela", "borba", "gaby"].includes(text);
-    
+            const isKitty = ["lucky", "emma", "rempi"].includes(text);
+
             if (isSpecial) {
                 word.innerHTML = `<span class="illuminated special">${text.substring(0, progress + 1)}</span>${text.substring(progress + 1)}`;
+            } else if (isKitty) {
+                word.innerHTML = `<span class="illuminated kitty">${text.substring(0, progress + 1)}</span>${text.substring(progress + 1)}`;
             } else {
                 word.innerHTML = `<span class="illuminated">${text.substring(0, progress + 1)}</span>${text.substring(progress + 1)}`;
             }
-    
+
             word.dataset.progress = progress + 1;
-    
+
             if (progress + 1 === text.length) {
                 let wordPoints = 10 + text.length;
-    
+
                 if (isSpecial) {
                     if (!specialSound.paused) {
                         specialSound.currentTime = 0;
@@ -181,38 +184,33 @@ document.addEventListener('keydown', (event) => {
                     explosion.play();
                 }
 
-                // Guardamos la posición original de la palabra
                 const wordRect = word.getBoundingClientRect();
-                const originalX = wordRect.left + window.scrollX; // Posición X original
-                const originalY = wordRect.top + window.scrollY; // Posición Y original
+                const originalX = wordRect.left + window.scrollX;
+                const originalY = wordRect.top + window.scrollY;
 
-                // Añadimos la animación de explosión
                 word.classList.add('explosion-effect');
 
-                // Colocamos un "wrapper" para que la animación ocurra en la posición original
                 const wrapper = document.createElement('div');
                 wrapper.classList.add('explosion-wrapper');
                 wrapper.style.position = 'absolute';
                 wrapper.style.left = `${originalX}px`;
                 wrapper.style.top = `${originalY}px`;
 
-                // Añadimos la palabra dentro del wrapper
                 wrapper.appendChild(word);
                 document.body.appendChild(wrapper);
 
-                // Esperamos que termine la animación antes de eliminar la palabra
                 setTimeout(() => {
-                    wrapper.remove(); // Elimina el wrapper y la palabra
+                    wrapper.remove();
                     activeWords.splice(index, 1);
                     score += wordPoints;
                     updateScore();
-    
+
                     if (score - previousScore >= 50) {
                         levelUp.play();
                         adjustDifficulty();
                         previousScore = score;
                     }
-                }, 500); // Esperamos que termine la animación (500ms)
+                }, 500);
             }
         }
     });
