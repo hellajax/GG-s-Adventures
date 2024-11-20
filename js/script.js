@@ -228,6 +228,7 @@ function endGame() {
         <h1>GAME OVER</h1>
         <p>Puntuación final: ${score}</p>
         <button id="restart-btn">Jugar de nuevo</button>
+        <button id="main-menu-btn">Volver al menú principal</button>
     `;
     gameContainer.appendChild(overlay);
 
@@ -236,9 +237,14 @@ function endGame() {
     document.getElementById('restart-btn').addEventListener('click', () => {
         resetGame();
     });
+
+    document.getElementById('main-menu-btn').addEventListener('click', () => {
+        resetGame(true);
+        showWelcomeScreen();
+    });
 }
 
-function resetGame() { 
+function resetGame(toWelcomeScreen = false) { 
     score = 0;
     updateScore();
 
@@ -256,14 +262,14 @@ function resetGame() {
         gameOverMessage.remove();
     }
 
-    spawnInterval = setInterval(spawnWord, wordSpawnRate);
-    moveInterval = setInterval(moveWords, 1000 / 60);
+    if (!toWelcomeScreen) {
+        spawnInterval = setInterval(spawnWord, wordSpawnRate);
+        moveInterval = setInterval(moveWords, 1000 / 60);
 
-    stopMusic();
-    startMusic();
+        stopMusic();
+        startMusic();
+    }
 }
-
-
 
 function startGame() {
     startMusic();
@@ -277,6 +283,7 @@ function startGame() {
 function showWelcomeScreen() {
     welcomeScreen.style.display = 'flex';
     gameContainer.style.display = 'none';
+    stopMusic();
 }
 
 showWelcomeScreen();
