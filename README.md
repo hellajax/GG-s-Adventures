@@ -34,15 +34,19 @@ recompensas adicionales.
 Efectos de audio para acciones clave como 
 completar palabras o avanzar de nivel.
 
-	•	Indicadores visuales: Letras ya escritas 
-resaltadas para facilitar el seguimiento 
-de tu progreso.
+	•	Indicadores visuales: 
+Letras ya escritas resaltadas para facilitar 
+el seguimiento de tu progreso.
 
-	•	Sistema de puntuación: Compite contra ti 
-mismo para superar tu mejor puntaje.
+	•	Sistema de puntuación: 
+Compite contra ti mismo para superar tu 
+mejor puntaje.
 
 	•	Selección de personajes: 
 Elige entre diferentes personajes con 
 diseños únicos para acompañarte en tu 
 aventura.
-	•	Transiciones fluidas: Opciones para reiniciar el juego o regresar al menú principal sin interrupciones.
+
+	•	Transiciones fluidas: 
+Opciones para reiniciar el juego o regresar 
+al menú principal sin interrupciones.
